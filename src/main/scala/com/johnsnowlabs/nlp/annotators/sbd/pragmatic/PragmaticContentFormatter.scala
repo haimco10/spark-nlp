@@ -191,6 +191,8 @@ class PragmaticContentFormatter(text: String) {
 }
 object PragmaticContentFormatter {
 
+  val WORD_REGEX: String = "[\\w|\\p{IsHangul}|\\p{IsHan}|\\p{IsThai}|\\p{IsHiragana}|\\p{IsKatakana}]"
+
   val formatListsFactory: RuleFactory = new RuleFactory(MATCH_ALL, BREAK_AND_PROTECT_FROM_BREAK)
     // http://rubular.com/r/XcpaJKH0sz
     //lower case dots
@@ -297,7 +299,7 @@ object PragmaticContentFormatter {
   val formatMultiplePeriodsFactory = new RuleFactory(MATCH_ALL, REPLACE_ALL_WITH_SYMBOL)
     // http://rubular.com/r/EUbZCNfgei
     //periods
-    .addRule(new RegexRule("(?<=\\w)\\.(?=\\w)", "formatMultiplePeriods"))
+    .addRule(new RegexRule("(?<="+WORD_REGEX+")\\.(?="+WORD_REGEX+")", "formatMultiplePeriods"))
 
   val formatGeoLocationsFactory = new RuleFactory(MATCH_ALL, REPLACE_ALL_WITH_SYMBOL)
     // http://rubular.com/r/G2opjedIm9
@@ -323,17 +325,17 @@ object PragmaticContentFormatter {
 
     // http://rubular.com/r/2YFrKWQUYi
     //between single quotes
-    .addRule(new RegexRule("(?<=\\s|^)'[\\w\\s?!\\.,|'\\w]+'(?:\\W)", "betweenPunctuations-singleQuot"))
+    .addRule(new RegexRule("(?<=\\s|^)'["+WORD_REGEX+"\\s?!\\.,|'"+WORD_REGEX+"]+'(?:\\W)", "betweenPunctuations-singleQuot"))
     // http://rubular.com/r/3Pw1QlXOjd
     //between double quotes
     //numbers and decimals
-    .addRule(new RegexRule("\"[\\w\\s?!\\.,]+\"", "betweenPunctuations-doubleQuot"))
+    .addRule(new RegexRule("\"["+WORD_REGEX+"\\s?!\\.,]+\"", "betweenPunctuations-doubleQuot"))
     // http://rubular.com/r/WX4AvnZvlX
     //between square brackets
-    .addRule(new RegexRule("\\[[\\w\\s?!\\.,]+\\]", "betweenPunctuations-squareBrack"))
+    .addRule(new RegexRule("\\[["+WORD_REGEX+"\\s?!\\.,]+\\]", "betweenPunctuations-squareBrack"))
     // http://rubular.com/r/6tTityPflI
     //between parens
-    .addRule(new RegexRule("\\([\\w\\s?!\\.,]+\\)", "betweenPunctuations-parens"))
+    .addRule(new RegexRule("\\(["+WORD_REGEX+"\\s?!\\.,]+\\)", "betweenPunctuations-parens"))
 
   val formatQuotationMarkInQuotationFactory = new RuleFactory(MATCH_ALL, REPLACE_ALL_WITH_SYMBOL)
     //http://rubular.com/r/aXPUGm6fQh
